@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodHub - Đặt đồ ăn online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        .cart-btn {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .cart-count {
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            background: white;
+            border-radius: 50px;
+            padding: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-box button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .search-box button:hover {
+            background: #5568d3;
+        }
+
+        /* Categories */
+        .categories {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 20px;
+        }
+
+        .categories h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            background: white;
+            padding: 2rem 1rem;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-card h3 {
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        /* Menu Items */
+        .menu-section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 20px;
+        }
+
+        .menu-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .menu-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .menu-card-content {
+            padding: 1.5rem;
+        }
+
+        .menu-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .menu-card p {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .menu-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .rating {
+            color: #ffa500;
+            font-size: 0.9rem;
+        }
+
+        .add-to-cart {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 1rem;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: #5568d3;
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.active {
+            right: 0;
+        }
+
+        .cart-header {
+            background: #667eea;
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-info h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .qty-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .qty-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .remove-item {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-left: auto;
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 2px solid #eee;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .checkout-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background: #5568d3;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1500;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background: #2d3748;
+            color: white;
+            padding: 3rem 20px;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #4a5568;
+            color: #cbd5e0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+
+            nav {
+                gap: 1rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                🍔 FoodHub
+            </div>
+            <nav>
+                <a href="#home">Trang chủ</a>
+                <a href="#menu">Thực đơn</a>
+                <a href="#about">Về chúng tôi</a>
+                <a href="#" class="cart-btn" onclick="toggleCart()">
+                    🛒 Giỏ hàng
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Đặt đồ ăn ngon, giao tận nơi</h1>
+        <p>Hàng trăm món ăn đa dạng, giao hàng nhanh chóng trong 30 phút</p>
+        <div class="search-box">
+            <input type="text" placeholder="Tìm kiếm món ăn, nhà hàng...">
+            <button>Tìm kiếm</button>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories">
+        <h2>Danh mục món ăn</h2>
+        <div class="category-grid">
+            <div class="category-card" onclick="filterCategory('burger')">
+                <div class="category-icon">🍔</div>
+                <h3>Burger</h3>
+            </div>
+            <div class="category-card" onclick="filterCategory('pizza')">
+                <div class="category-icon">🍕</div>
+                <h3>Pizza</h3>
+            </div>
+            <div class="category-card" onclick="filterCategory('sushi')">
+                <div class="category-icon">🍣</div>
+                <h3>Sushi</h3>
+            </div>
+            <div class="category-card" onclick="filterCategory('noodles')">
+                <div class="category-icon">🍜</div>
+                <h3>Mì & Phở</h3>
+            </div>
+            <div class="category-card" onclick="filterCategory('drink')">
+                <div class="category-icon">🥤</div>
+                <h3>Đồ uống</h3>
+            </div>
+            <div class="category-card" onclick="filterCategory('dessert')">
+                <div class="category-icon">🍰</div>
+                <h3>Tráng miệng</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Items -->
+    <section class="menu-section" id="menu">
+        <h2>Món ăn phổ biến</h2>
+        <div class="menu-grid" id="menuGrid">
+            <!-- Menu items will be inserted here by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2>Giỏ hàng của bạn</h2>
+            <button class="close-cart" onclick="toggleCart()">✕</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart">
+                <p>Giỏ hàng trống</p>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Thêm món ăn vào giỏ hàng nhé!</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Tổng cộng:</span>
+                <span id="cartTotal">0đ</span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Đặt hàng ngay</button>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="toggleCart()"></div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Về FoodHub</h3>
+                <ul>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Tin tức</a></li>
+                    <li><a href="#">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Hỗ trợ</h3>
+                <ul>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                    <li><a href="#">Chính sách</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Liên hệ</h3>
+                <ul>
+                    <li>📞 Hotline: 1900-xxxx</li>
+                    <li>📧 Email: support@foodhub.vn</li>
+                    <li>📍 Hà Nội, Việt Nam</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 FoodHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Menu data
+        const menuItems = [
+            {
+                id: 1,
+                name: 'Burger Bò Phô Mai',
+                description: 'Burger bò Úc 100%, phô mai cheddar, rau xanh tươi',
+                price: 89000,
+                image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop',
+                category: 'burger',
+                rating: 4.5
+            },
+            {
+                id: 2,
+                name: 'Pizza Hải Sản',
+                description: 'Tôm, mực, sò điệp, phô mai mozzarella',
+                price: 159000,
+                image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop',
+                category: 'pizza',
+                rating: 4.8
+            },
+            {
+                id: 3,
+                name: 'Sushi Cá Hồi',
+                description: 'Cá hồi Na Uy tươi, cơm Nhật, rong biển',
+                price: 129000,
+                image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400&h=300&fit=crop',
+                category: 'sushi',
+                rating: 4.7
+            },
+            {
+                id: 4,
+                name: 'Phở Bò Đặc Biệt',
+                description: 'Phở bò Hà Nội truyền thống, nước dùng đậm đà',
+                price: 65000,
+                image: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=400&h=300&fit=crop',
+                category: 'noodles',
+                rating: 4.6
+            },
+            {
+                id: 5,
+                name: 'Trà Sữa Trân Châu',
+                description: 'Trà sữa Đài Loan, trân châu đen dai ngon',
+                price: 35000,
+                image: 'https://images.unsplash.com/photo-1525385133512-2f3bdd039054?w=400&h=300&fit=crop',
+                category: 'drink',
+                rating: 4.4
+            },
+            {
+                id: 6,
+                name: 'Bánh Tiramisu',
+                description: 'Bánh Tiramisu Ý nguyên bản, kem mascarpone',
+                price: 55000,
+                image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop',
+                category: 'dessert',
+                rating: 4.9
+            },
+            {
+                id: 7,
+                name: 'Burger Gà Giòn',
+                description: 'Gà giòn rụm, sốt mayonnaise, salad tươi',
+                price: 75000,
+                image: 'https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400&h=300&fit=crop',
+                category: 'burger',
+                rating: 4.3
+            },
+            {
+                id: 8,
+                name: 'Pizza Pepperoni',
+                description: 'Xúc xích pepperoni, phô mai mozzarella đặc biệt',
+                price: 149000,
+                image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&h=300&fit=crop',
+                category: 'pizza',
+                rating: 4.7
+            }
+        ];
+
+        let cart = [];
+
+        // Render menu items
+        function renderMenu(items = menuItems) {
+            const menuGrid = document.getElementById('menuGrid');
+            menuGrid.innerHTML = items.map(item => `
+                <div class="menu-card">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="menu-card-content">
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                        <div class="menu-card-footer">
+                            <span class="price">${item.price.toLocaleString()}đ</span>
+                            <span class="rating">⭐ ${item.rating}</span>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(${item.id})">
+                            Thêm vào giỏ
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Add to cart
+        function addToCart(itemId) {
+            const item = menuItems.find(i => i.id === itemId);
+            const existingItem = cart.find(i => i.id === itemId);
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...item, quantity: 1 });
+            }
+
+            updateCart();
+            showNotification('Đã thêm vào giỏ hàng!');
+        }
+
+        // Update cart display
+        function updateCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartCount = document.getElementById('cartCount');
+            const cartTotal = document.getElementById('cartTotal');
+
+            cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-cart">
+                        <p>Giỏ hàng trống</p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Thêm món ăn vào giỏ hàng nhé!</p>
+                    </div>
+                `;
+                cartTotal.textContent = '0đ';
+                return;
+            }
+
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p style="color: #667eea; font-weight: bold;">${item.price.toLocaleString()}đ</p>
+                        <div class="cart-item-controls">
+                            <button class="qty-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                            <span style="padding: 0 1rem; font-weight: bold;">${item.quantity}</span>
+                            <button class="qty-btn" onclick="increaseQuantity(${item.id})">+</button>
+                            <button class="remove-item" onclick="removeFromCart(${item.id})">Xóa</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotal.textContent = total.toLocaleString() + 'đ';
+        }
+
+        // Cart functions
+        function increaseQuantity(itemId) {
+            const item = cart.find(i => i.id === itemId);
+            if (item) {
+                item.quantity++;
+                updateCart();
+            }
+        }
+
+        function decreaseQuantity(itemId) {
+            const item = cart.find(i => i.id === itemId);
+            if (item && item.quantity > 1) {
+                item.quantity--;
+                updateCart();
+            }
+        }
+
+        function removeFromCart(itemId) {
+            cart = cart.filter(i => i.id !== itemId);
+            updateCart();
+        }
+
+        // Toggle cart
+        function toggleCart() {
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Filter by category
+        function filterCategory(category) {
+            const filtered = menuItems.filter(item => item.category === category);
+            renderMenu(filtered);
+            document.getElementById('menu').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Checkout
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Giỏ hàng trống!');
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            alert(`Đặt hàng thành công!\n\nTổng tiền: ${total.toLocaleString()}đ\n\nChúng tôi sẽ giao hàng trong 30-45 phút!`);
+            cart = [];
+            updateCart();
+            toggleCart();
+        }
+
+        // Notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 3000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+
+        // Initialize
+        renderMenu();
+    </script>
+</body>
+</html>
