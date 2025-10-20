@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FoodHub - Đặt đồ ăn online</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <!-- Logo = nút Trang chủ -->
+      <a href="#home" class="logo" id="logoHome" aria-label="Về trang chủ">
+        <div>
+          <img src="https://raw.githubusercontent.com/dinhquycoder2k5/DataStoreInHere/refs/heads/main/assets/Gemini_Generated_Image_5vxokj5vxokj5vxo.png" alt="FoodHub Logo">
+        </div>
+        FastFood
+      </a>
+
+      <nav>
+        <a href="#home">Trang chủ</a>
+        <a href="#menu">Thực đơn</a>
+        <a href="#about">Về chúng tôi</a>
+
+        <!-- Giỏ hàng -->
+        <a href="#" class="cart-btn" onclick="toggleCart()">
+          🛒 Giỏ hàng
+          <span class="cart-count" id="cartCount">0</span>
+        </a>
+
+        <!-- Đơn Hàng Của Tôi -->
+        <a href="#" class="orders-btn" onclick="openOrders()">📦 Đơn Hàng Của Tôi</a>
+
+        <!-- Hỗ trợ khách hàng -->
+        <a href="#" class="support-btn" onclick="openSupport()">🧑‍💼 Hỗ trợ</a>
+
+        <!-- Đăng nhập / Tài khoản -->
+        <a href="#" id="authBtn" class="login-btn" onclick="openLogin()">🔐 Đăng nhập</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <h1>Đặt đồ ăn ngon, giao tận nơi</h1>
+    <p>Hàng trăm món ăn đa dạng, giao hàng nhanh chóng trong 30 phút</p>
+    <div class="search-box">
+      <input type="text" placeholder="Tìm kiếm món ăn, nhà hàng...">
+      <button>Tìm kiếm</button>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="categories">
+    <h2>Danh mục món ăn</h2>
+    <div class="category-grid">
+      <div class="category-card" onclick="filterCategory('burger')"><div class="category-icon">🍔</div><h3>Burger</h3></div>
+      <div class="category-card" onclick="filterCategory('pizza')"><div class="category-icon">🍕</div><h3>Pizza</h3></div>
+      <div class="category-card" onclick="filterCategory('sushi')"><div class="category-icon">🍣</div><h3>Sushi</h3></div>
+      <div class="category-card" onclick="filterCategory('noodles')"><div class="category-icon">🍜</div><h3>Mì & Phở</h3></div>
+      <div class="category-card" onclick="filterCategory('drink')"><div class="category-icon">🥤</div><h3>Đồ uống</h3></div>
+      <div class="category-card" onclick="filterCategory('dessert')"><div class="category-icon">🍰</div><h3>Tráng miệng</h3></div>
+    </div>
+  </section>
+
+  <!-- Menu Items -->
+  <section class="menu-section" id="menu">
+    <h2>Món ăn phổ biến</h2>
+    <div class="menu-grid" id="menuGrid"><!-- Render bằng JS --></div>
+  </section>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h2>Giỏ hàng của bạn</h2>
+      <button class="close-cart" onclick="toggleCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="empty-cart">
+        <p>Giỏ hàng trống</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Thêm món ăn vào giỏ hàng nhé!</p>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total"><span>Tổng cộng:</span><span id="cartTotal">0đ</span></div>
+      <button class="checkout-btn" onclick="checkout()">Đặt hàng ngay</button>
+    </div>
+  </div>
+
+  <!-- Orders Sidebar -->
+  <div class="orders-sidebar" id="ordersSidebar">
+    <div class="orders-header">
+      <h2>Đơn Hàng Của Tôi</h2>
+      <button class="close-orders" onclick="closeOrders()">✕</button>
+    </div>
+    <div class="orders-list" id="ordersList"><!-- Render bằng JS --></div>
+  </div>
+
+  <!-- Support Modal -->
+  <div class="modal" id="supportModal" aria-hidden="true" role="dialog" aria-label="Hỗ trợ khách hàng">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeSupport()">✕</button>
+      <h3>Hỗ trợ khách hàng</h3>
+      <p class="muted">Chúng tôi sẵn sàng giúp đỡ bạn 08:00–22:00 mỗi ngày.</p>
+
+      <div class="faq">
+        <details>
+          <summary>Phí giao hàng tính như thế nào?</summary>
+          <p>Phí dựa trên khoảng cách & khung giờ cao điểm. Hệ thống sẽ báo phí trước khi đặt.</p>
+        </details>
+        <details>
+          <summary>Tôi muốn huỷ đơn thì làm sao?</summary>
+          <p>Trong mục “Đơn Hàng Của Tôi”, chọn đơn đang xử lý và bấm Huỷ (nếu còn thời gian cho phép).</p>
+        </details>
+        <details>
+          <summary>Tôi cần xuất hoá đơn VAT?</summary>
+          <p>Điền thông tin công ty khi thanh toán hoặc gửi yêu cầu tại form dưới đây.</p>
+        </details>
+      </div>
+
+      <form class="support-form" onsubmit="return submitSupport(event)">
+        <label>Họ tên
+          <input type="text" id="supName" placeholder="Nguyễn Văn A" required>
+        </label>
+        <label>Email
+          <input type="email" id="supEmail" placeholder="you@example.com" required>
+        </label>
+        <label>Nội dung yêu cầu
+          <textarea id="supMsg" rows="4" placeholder="Mô tả vấn đề của bạn..." required></textarea>
+        </label>
+        <button class="btn-primary" type="submit">Gửi yêu cầu</button>
+      </form>
+      <div class="contact-inline">
+        <span>📞 Hotline: 1900-xxxx</span> • <span>📧 support@foodhub.vn</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div class="modal" id="loginModal" aria-hidden="true" role="dialog" aria-label="Đăng nhập">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeLogin()">✕</button>
+      <h3>Đăng nhập</h3>
+      <form class="login-form" onsubmit="return handleLogin(event)">
+        <label>Email
+          <input type="email" id="loginEmail" placeholder="you@example.com" required>
+        </label>
+        <label>Mật khẩu
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" id="rememberMe"> Ghi nhớ tôi
+        </label>
+        <button class="btn-primary" type="submit">Đăng nhập</button>
+      </form>
+      <p class="muted small">Demo không có backend – thông tin chỉ lưu cục bộ để minh hoạ.</p>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay" onclick="closePanels()"></div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Về FoodHub</h3>
+        <ul><li><a href="#">Giới thiệu</a></li><li><a href="#">Tin tức</a></li><li><a href="#">Tuyển dụng</a></li></ul>
+      </div>
+      <div class="footer-section">
+        <h3>Hỗ trợ</h3>
+        <ul><li><a href="#">Câu hỏi thường gặp</a></li><li><a href="#">Chính sách</a></li><li><a href="#">Liên hệ</a></li></ul>
+      </div>
+      <div class="footer-section">
+        <h3>Liên hệ</h3>
+        <ul><li>📞 Hotline: 1900-xxxx</li><li>📧 Email: support@foodhub.vn</li><li>📍 Hà Nội, Việt Nam</li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2025 FoodHub. All rights reserved.</p></div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
