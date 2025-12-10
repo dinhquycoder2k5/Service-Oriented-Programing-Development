@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Quản lý Khách hàng - Admin</title>
+    
+    <link rel="stylesheet" href="../css/admin.css"/>
+    <link rel="stylesheet" href="customer.css"/>
+</head>
+<body>
+
+<aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🍔 Admin Panel</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="../admin/admin.html" class="nav-item">📊 Dashboard</a>
+            <a href="../restaurant/admin-restaurant.html" class="nav-item">🏪 Nhà hàng & Món ăn</a>
+            <a href="customer.html" class="nav-item active">👥 Khách hàng</a>
+            <a href="../payment/admin-payment.html" class="nav-item">💳 Thanh toán</a>
+            <a href="../order/admin-order.html" class="nav-item">📦 Đơn hàng</a>
+            <a href="../delivery/admin-delivery.html" class="nav-item">🚚 Giao hàng</a>
+            <a href="../index.html" class="nav-item logout">⬅️ Về trang chủ</a>
+        </nav>
+    </aside>
+
+<main class="main-content">
+    <header class="content-header">
+        <h1>Quản lý Khách hàng</h1>
+        <div class="user-info">👤 Admin</div>
+    </header>
+
+    <div class="content-body">
+        <div class="card">
+            <div class="card-header">
+                <h3>Danh sách Khách hàng</h3>
+                <div class="tools">
+                    <input type="text" id="customerSearch" placeholder="🔍 Nhập ID hoặc Tên..." onkeyup="handleSearchKey(event)">
+                    <button class="btn btn-primary" onclick="searchCustomer()">Tìm kiếm</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Họ và tên</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customerTableBody">
+                        <tr>
+                            <td colspan="6" class="loading-text">⏳ Đang tải dữ liệu từ Server...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <span>Hiển thị 10 kết quả</span>
+                <div class="page-controls">
+                    <button class="btn-page" disabled>&lt;</button>
+                    <button class="btn-page active">1</button>
+                    <button class="btn-page">&gt;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="modal" id="customerModal">
+    <div class="modal-content large-modal">
+        <div class="modal-header">
+            <h3>Hồ sơ Khách hàng #<span id="modalCustomerId"></span></h3>
+            <button class="modal-close" onclick="closeCustomerModal()">✕</button>
+        </div>
+        
+        <div class="modal-body">
+            <form id="customerForm">
+                <div class="form-grid">
+                    <div class="info-column">
+                        <h4 class="section-title">Thông tin cá nhân</h4>
+                        <div class="form-group">
+                            <label>Họ và tên</label>
+                            <input type="text" id="custName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Email (Không thể sửa)</label>
+                            <input type="email" id="custEmail" class="form-control" disabled style="background: #f1f5f9;">
+                        </div>
+                        <div class="form-group">
+                            <label>Số điện thoại</label>
+                            <input type="text" id="custPhone" class="form-control">
+                        </div>
+                        <button type="button" class="btn btn-primary w-100" onclick="saveCustomerInfo()">Lưu thông tin</button>
+                    </div>
+
+                    <div class="address-column">
+                        <h4 class="section-title">Sổ địa chỉ</h4>
+                        <div class="address-input-group">
+                            <input type="text" id="newStreet" placeholder="Số nhà/Đường" class="form-control sm">
+                            <input type="text" id="newCity" placeholder="Thành phố" class="form-control sm">
+                            <button type="button" class="btn btn-secondary sm" onclick="addNewAddress()">Thêm</button>
+                        </div>
+                        
+                        <ul id="addressList" class="address-list">
+                            </ul>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeCustomerModal()"></div>
+
+<script src="../js/api.js"></script> <script src="customer.js"></script>
+</body>
+</html>

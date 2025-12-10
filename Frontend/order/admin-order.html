@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Quản lý Đơn hàng - Admin</title>
+    
+    <link rel="stylesheet" href="../css/admin.css"/>
+    <link rel="stylesheet" href="order.css"/>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header"><h2>🍔 Admin Panel</h2></div>
+        <nav class="sidebar-nav">
+            <a href="../admin/admin.html" class="nav-item">📊 Dashboard</a>
+            <a href="../restaurant/admin-restaurant.html" class="nav-item">🏪 Nhà hàng & Món ăn</a>
+            <a href="../customer/customer.html" class="nav-item">👥 Khách hàng</a>
+            <a href="../payment/admin-payment.html" class="nav-item">💳 Thanh toán</a>
+            <a href="admin-order.html" class="nav-item active">📦 Đơn hàng</a>
+            <a href="../delivery/admin-delivery.html" class="nav-item">🚚 Giao hàng</a>
+            <a href="../index.html" class="nav-item logout">⬅️ Về trang chủ</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="content-header">
+            <h1>Quản lý Đơn hàng</h1>
+            <div class="user-info">👤 Admin</div>
+        </header>
+
+        <div class="content-body">
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon pending">⏳</div>
+                    <div class="stat-info">
+                        <h4>Chờ xử lý</h4>
+                        <span id="countPending">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon shipping">🚚</div>
+                    <div class="stat-info">
+                        <h4>Đang giao</h4>
+                        <span id="countShipping">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon income">💰</div>
+                    <div class="stat-info">
+                        <h4>Doanh thu hôm nay</h4>
+                        <span id="todayRevenue">0 ₫</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="filterOrders('ALL')">Tất cả</button>
+                <button class="tab-btn" onclick="filterOrders('PENDING')">Chờ xử lý</button>
+                <button class="tab-btn" onclick="filterOrders('CONFIRMED')">Đã duyệt</button>
+                <button class="tab-btn" onclick="filterOrders('DELIVERING')">Đang giao</button>
+                <button class="tab-btn" onclick="filterOrders('COMPLETED')">Hoàn thành</button>
+                <button class="tab-btn" onclick="filterOrders('CANCELLED')">Đã hủy</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 id="tableTitle">Danh sách đơn hàng</h3>
+                    <div class="tools">
+                        <input type="text" id="orderSearch" placeholder="🔍 Tìm mã đơn (ID)..." onkeyup="searchOrder()">
+                        <button class="btn-primary" onclick="loadOrders()">🔄 Làm mới</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Khách hàng (ID)</th>
+                                <th>Ngày đặt</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderTableBody">
+                            <tr><td colspan="6" class="loading-text">⏳ Đang tải dữ liệu từ Order Service...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="orderModal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h3>Chi tiết đơn hàng #<span id="detailId">...</span></h3>
+                <button class="modal-close" onclick="closeOrderModal()">✕</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="order-info-box">
+                    <div class="info-row">
+                        <span class="label">Khách hàng ID:</span>
+                        <span class="value" id="detailUserId">...</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Ngày đặt:</span>
+                        <span class="value" id="detailDate">...</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Địa chỉ giao:</span>
+                        <span class="value" id="detailAddress">...</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Trạng thái:</span>
+                        <span id="detailStatus">...</span>
+                    </div>
+                </div>
+
+                <h4 style="margin: 20px 0 10px; color: var(--text-main);">📦 Danh sách món ăn</h4>
+                <div class="table-container" style="border: 1px solid #eee; box-shadow: none;">
+                    <table class="data-table">
+                        <thead style="background: #f8fafc;">
+                            <tr>
+                                <th style="background: #f8fafc; color:#64748b;">Tên món</th>
+                                <th style="background: #f8fafc; color:#64748b;">Đơn giá</th>
+                                <th style="background: #f8fafc; color:#64748b;">Số lượng</th>
+                                <th style="background: #f8fafc; color:#64748b; text-align: right;">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody id="detailItemsBody">
+                            </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" style="text-align: right; font-weight: bold; padding: 15px;">Tổng cộng:</td>
+                                <td style="text-align: right; font-weight: bold; color: var(--primary); font-size: 1.1rem;" id="detailTotal"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="form-actions" id="modalActions">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeOrderModal()"></div>
+
+    <script src="../js/api.js"></script>
+    <script src="order.js"></script>
+</body>
+</html>

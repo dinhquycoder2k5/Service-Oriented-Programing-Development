@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FoodHub - Đặt đồ ăn online</title>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+  <header>
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        <div>
+          <img src="https://raw.githubusercontent.com/dinhquycoder2k5/DataStoreInHere/refs/heads/main/assets/Gemini_Generated_Image_5vxokj5vxokj5vxo.png" alt="FoodHub Logo">
+        </div>
+        FastFood
+      </a>
+
+      <nav>
+        <a href="index.html">Trang chủ</a>
+        <a href="#menu">Thực đơn</a>
+        
+        <a href="#" class="cart-btn" onclick="toggleCart()">
+          🛒 Giỏ hàng
+          <span class="cart-count" id="cartCount">0</span>
+        </a>
+
+        <a href="#" class="orders-btn" onclick="checkLoginAndRedirect('order/admin-order.html')">📦 Đơn Hàng</a>
+        
+        <a href="#" id="authBtn" class="login-btn" onclick="handleAuthClick()">🔐 Đăng nhập</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>Đặt đồ ăn ngon, giao tận nơi</h1>
+      <p>Hàng trăm món ăn đa dạng, giao hàng nhanh chóng.</p>
+      
+      <div class="search-box">
+        <input type="text" id="globalSearch" placeholder="Tìm kiếm món ăn, nhà hàng...">
+        <button onclick="handleSearch()">Tìm kiếm</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="menu-section" id="menu">
+    <h2>🔥 Món ăn phổ biến</h2>
+    <div class="menu-grid" id="menuGrid">
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+            <div class="loader"></div>
+            <p style="margin-top: 10px; color: #666;">Đang kết nối tới Restaurant Service...</p>
+        </div>
+    </div>
+  </section>
+
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h2>Giỏ hàng của bạn</h2>
+      <button class="close-cart" onclick="toggleCart()">✕</button>
+    </div>
+    
+    <div class="cart-items" id="cartItems">
+      <div class="empty-cart">
+        <p>Giỏ hàng trống</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Thêm món ăn vào giỏ hàng nhé!</p>
+      </div>
+    </div>
+
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Tổng cộng:</span><span id="cartTotal">0 ₫</span>
+      </div>
+      <button class="checkout-btn" onclick="checkout()">Đặt hàng ngay</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="closePanels()"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script> 
+
+</body>
+</html>

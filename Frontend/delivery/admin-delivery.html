@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quản lý Giao hàng - Admin</title>
+  
+  <link rel="stylesheet" href="../css/admin.css"/>
+  
+  <link rel="stylesheet" href="delivery.css"/>
+</head>
+<body>
+
+<aside class="sidebar">
+        <div class="sidebar-header"><h2>🍔 Admin Panel</h2></div>
+        <nav class="sidebar-nav">
+            <a href="../admin/admin.html" class="nav-item">📊 Dashboard</a>
+            <a href="../restaurant/admin-restaurant.html" class="nav-item">🏪 Nhà hàng & Món ăn</a>
+            <a href="../customer/customer.html" class="nav-item">👥 Khách hàng</a>
+            <a href="../payment/admin-payment.html" class="nav-item">💳 Thanh toán</a>
+            <a href="../order/admin-order.html" class="nav-item">📦 Đơn hàng</a>
+            <a href="admin-delivery.html" class="nav-item active">🚚 Giao hàng</a>
+            <a href="../index.html" class="nav-item logout">⬅️ Về trang chủ</a>
+        </nav>
+    </aside>
+
+<main class="main-content">
+  <header class="content-header">
+    <h1>Quản lý Vận chuyển</h1>
+    <div class="user-info">👤 Admin</div>
+  </header>
+
+  <div class="content-body">
+    
+    <div class="status-filter-bar">
+        <button class="filter-btn active" onclick="filterDelivery('ALL')">📦 Tất cả</button>
+        <button class="filter-btn" onclick="filterDelivery('PENDING')">⏳ Chờ tài xế</button>
+        <button class="filter-btn" onclick="filterDelivery('CONFIRMED')">🛵 Đã gán xe</button>
+        <button class="filter-btn" onclick="filterDelivery('IN_TRANSIT')">🚚 Đang giao</button>
+        <button class="filter-btn" onclick="filterDelivery('DELIVERED')">✅ Đã giao</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>Danh sách vận đơn</h3>
+        <div class="tools">
+            <input type="text" id="deliverySearch" placeholder="🔍 Tìm mã đơn, tài xế..." onkeyup="searchDelivery()">
+            <button class="btn btn-primary" onclick="loadDeliveries()">🔄 Làm mới</button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Mã Đơn (Order)</th>
+              <th>Người nhận</th>
+              <th>Tài xế</th>
+              <th>Trạng thái</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="deliveryTableBody">
+             <tr><td colspan="6" class="loading-text">⏳ Đang tải dữ liệu từ Delivery Service...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="modal" id="driverModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>🛵 Phân công tài xế</h3>
+      <button class="modal-close" onclick="closeDriverModal()">✕</button>
+    </div>
+    
+    <form id="driverForm" onsubmit="return assignDriver(event)">
+      <input type="hidden" id="deliveryIdHidden">
+      
+      <div class="info-box">
+        Đang gán cho đơn hàng: <strong id="targetOrderId">...</strong>
+      </div>
+
+      <div class="form-group">
+        <label>Mã tài xế (ID)</label>
+        <input type="text" id="driverId" required placeholder="VD: DRV-001" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>Tên tài xế</label>
+        <input type="text" id="driverName" required placeholder="VD: Nguyễn Văn A" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>Biển số xe</label>
+        <input type="text" id="vehicleNumber" required placeholder="VD: 29A-123.45" class="form-control">
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeDriverModal()">Hủy</button>
+        <button type="submit" class="btn btn-primary">Xác nhận</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeDriverModal()"></div>
+
+<script src="../js/api.js"></script> <script src="delivery.js"></script>
+</body>
+</html>
